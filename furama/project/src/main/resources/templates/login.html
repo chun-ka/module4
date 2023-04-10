@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+
+<div class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <h1 class="text-center" style="color: red">Đăng nhập</h1>
+        <form action="/login" method="post">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Tên dăng nhập</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"  name="username">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" name="password" >
+            </div>
+            <div class="mb-3 form-check">
+                <label class="form-check-label" for="exampleCheck1">Duy trì đăng nhập</label>
+                <input type="checkbox" class="form-check-input" id="exampleCheck1" name="remember-me">
+            </div>
+            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+        </form>
+        <div class="col-4"></div>
+    </div>
+</div>
+</body>
+
+</html>

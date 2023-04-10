@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+<!--<div th:insert="~{layout::header}"></div>-->
+
+<!--<div class="col-sm-12" style="background-color:rgba(0, 0, 0, 0.2);height: 70px"><h1 style="text-align: center;line-height: 70px  ">Danh Sách</h1></div>-->
+<!--<p><a th:href="@{/templates/product/create}" class="btn btn-primary" style="margin: 10px;float: right;margin-right: 50px" >Thêm mới</a></p>-->
+<!--<div th:if ="${mess}">-->
+<!--  <p style="color: red;font-weight: bold" th:text="${mess}"></p>-->
+<!--</div>-->
+<!--<div style="margin-top:10px" >-->
+<!--  <table class="table table-striped table-hover">-->
+<!--    <thead>-->
+<!--    <tr >-->
+<!--      <th scope="col">STT</th>-->
+<!--      <th scope="col">Tên bài hát</th>-->
+<!--      <th scope="col">Nghệ sĩ</th>-->
+<!--      <th scope="col">Thể loại</th>-->
+<!--      <th scope="col"></th>-->
+<!--      <th scope="col"></th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="song,rowStat:${songList}">-->
+<!--      <td th:text="${rowStat.count}+${songList.number}*${songList.size}"></td>-->
+<!--      <td th:text="${song.songName}"></td>-->
+<!--      <td th:text="${song.artist}"></td>-->
+<!--      <td th:text="${song.category}"></td>-->
+<!--      <td><a th:href="@{/templates/product/view/{id}(id=${song.id})}" class="btn btn-primary">View</a></td>-->
+<!--      <td><a th:href="@{/templates/product/edit/{id}(id=${song.id})}" class="btn btn-warning">Edit</a></td>-->
+<!--      <td>-->
+<!--        <a th:attr="onclick=|deleteInfo('${song.id}','${song.songName}')|"-->
+<!--           class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">-->
+<!--          Delete-->
+<!--        </a>-->
+<!--      </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--  </table>-->
+<!--</div>-->
+
+<!--<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">-->
+<!--  <div class="modal-dialog">-->
+<!--    <form th:action="@{/templates/product/delete}" th:method="post">-->
+<!--      <div class="modal-content">-->
+<!--        <div class="modal-header">-->
+<!--          <h5 class="modal-title" id="deleteModalLabel">Delete Song</h5>-->
+<!--          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--        </div>-->
+<!--        <div class="modal-body">-->
+<!--          <input name="deleteId" hidden id="deleteId">-->
+<!--          <span>Are you want to deletesong </span>-->
+<!--          <span style="color: darkred" id="deleteName"></span>-->
+<!--        </div>-->
+<!--        <div class="modal-footer">-->
+<!--          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>-->
+<!--          <button type="submit" class="btn btn-danger">Delete</button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--<div>-->
+<!--<nav aria-label="..." class="justify-content-center d-flex">-->
+<!--  <ul class="pagination">-->
+<!--    <li class="page-item">-->
+<!--      <a class="page-link" th:href="@{/song(page=${songList.number - 1})}" th:if="${songList.hasPrevious()}">&laquo;</a>-->
+<!--    </li>-->
+<!--    <li class="page-item disabled" th:unless="${songList.hasPrevious()}">-->
+<!--      <a class="page-link">&laquo;</a>-->
+<!--    </li>-->
+
+<!--    <li class="page-item">-->
+<!--      <a class="page-link" th:href="@{/song(page=${songList.number - 1})}" th:if="${songList.hasPrevious()}" th:text="${songList.number}"></a>-->
+<!--    </li>-->
+
+<!--    <li class="page-item active">-->
+<!--      <a class="page-link" th:href="@{/(page=${songList.number})}" th:text="${songList.number + 1}">-->
+<!--        <span class="sr-only">(trang hiện tại)</span></a>-->
+<!--    </li>-->
+
+<!--    <li class="page-item">-->
+<!--      <a class="page-link" th:href="@{/(page=${songList.number+1})}" th:text="${songList.number+2}" th:if="${songList.hasNext()}" ></a>-->
+<!--    </li>-->
+
+<!--    <li class="page-item">-->
+<!--      <a class="page-link" th:href="@{/(page=${songList.number+1})}" th:if="${songList.hasNext()}">&raquo;</a>-->
+<!--    </li>-->
+<!--    <li class="page-item disabled" th:unless="${songList.hasNext()}">-->
+<!--      <a class="page-link">&raquo;</a>-->
+<!--    </li>-->
+<!--  </ul>-->
+<!--</nav>-->
+<!--</div>-->
+
+
+<!--<div th:insert="~{layout::footer}"></div>-->
+
+<!--<script>-->
+<!--  function deleteInfo(id,name){-->
+<!--    document.getElementById("deleteId").value=id;-->
+<!--    document.getElementById("deleteName").innerText=name;-->
+<!--  }-->
+<!--</script>-->
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Image</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product:${productList}">
+          <td th:text="${product.name}"></td>
+          <td>
+            <a th:href="@{/shop/detail/{id}(id=${product.id})}">
+              <img th:src="@{${product.image}}" style="height: 100px" alt="lỗi">
+            </a>
+          </td>
+          <td th:text="${product.description}"></td>
+          <td th:text="${product.price}"></td>
+          <td>
+            <a th:href="@{/shop/add/{id}(id=${product.id})}" class="btn btn-success" role="button">+</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-4" th:if="${historyProduct}">
+      <div class="card sticky-top border-0">
+        <img th:src="${historyProduct.image}" alt="" class="card-img-top">
+        <div class="card-body">
+          <h4 class="card-title" th:text="${historyProduct.name}"></h4>
+          <p class="card-text" th:text="${historyProduct.price}"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

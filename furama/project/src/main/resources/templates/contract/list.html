@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:insert="~{layout::header}"></div>
+
+<div class="row">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding: 0;line-height: 50px">
+            <div class="container-fluid" style="background-color:#218c74">
+                <a class="navbar-brand a" th:href="@{/}" style="margin-left: 100px;color: white">Home</a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active a" aria-current="page" href=""
+                               style="margin-left: 60px;color: white">Employee</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link a" th:href="@{/customer}"
+                               style="color: white;margin-left: 60px">Customer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link a" th:href="@{/facility}"
+                               style="color: white;margin-left: 60px">Service</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link  a" style="color: white;margin-left: 60px"
+                               th:href="@{/contract}">Contract</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" method="get">
+                        <input class="form-control me-2" type="search" placeholder="Tên" aria-label="Search"
+                               name="name">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+
+<div class="col-sm-12" style="background-color:rgba(0, 0, 0, 0.2);height: 70px"><h1
+        style="text-align: center;line-height: 70px  ">Danh Sách</h1></div>
+<p><a data-bs-toggle="modal" data-bs-target="#addContract" class="btn btn-primary"
+      style="margin: 10px;float: right;margin-right: 50px">Thêm mới</a></p>
+
+
+<div style="margin-top:10px">
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Dịch vụ</th>
+            <th scope="col">Khách hàng</th>
+            <th scope="col">Ngày bắt đầu</th>
+            <th scope="col">Ngày kết thúc</th>
+            <th scope="col">Tiền đặt cọc</th>
+            <th scope="col">Tổng tiền</th>
+            <th scope="col" colspan="2">Các dịch vụ đi kèm</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="con,rowStat:${contractDtos}">
+            <td th:text="${rowStat.count}+${contractDtos.number}*${contractDtos.size}"></td>
+            <td th:text="${con.getNameFacility()}"></td>
+            <td th:text="${con.getNameCustomer()}"></td>
+            <td th:text="${con.getStartDate()}"></td>
+            <td th:text="${con.getEndDate()}"></td>
+            <td th:text="${con.getDeposit()}"></td>
+            <td th:text="${con.getTotalValue()}"></td>
+            <td>
+                <a th:attr="onclick=|contractId('${con.getId()}')|"
+                   class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contractAttachFacility">+</a>
+            </td>
+            <td>
+                <a th:attr="onclick=|attachFacilityInfo('${con.getAttachFacilityName()}')|"
+                   class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#attachFacility">
+                    Danh sách các dịch vụ đi kèm
+                </a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Modal thêm dịch vụ đi kèm-->
+<div class="modal fade" id="contractAttachFacility" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/contract/contractDetail/create}" th:object="${contractDetail}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm dịch vụ đi kèm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+
+                <div class="modal-body">
+                    <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{contract}" id="contractId" >
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Chọn dịch vụ:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" required placeholder="" name="attachFacility" th:field="*{facilitySet}">
+                                <option value="">--Chọn dịch vụ--</option>
+                                <option th:each="afl:${attachFacilityList}"
+                                        th:value="${afl.id}"
+                                        th:text="${afl.name}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Số lượng:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" placeholder="" required name="quantity" th:field="*{quantity}">
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Thêm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal dịch vụ đi kèm-->
+
+<div class="modal fade" id="attachFacility" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Các dịch vụ đi kèm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p style="color: darkred" id="attachFacilityName"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal thêm mới hợp đồng-->
+
+<div class="modal fade" id="addContract" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+
+        <!--                    //form thêm mới hợp đồng-->
+
+        <form th:action="@{/contract/create}" th:object="${contract}" method="post">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Thêm mới hợp đồng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+
+                    <input type="hidden" th:field="*{id}">
+
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" th:for="startDate">Ngày bắt đầu:</label>
+                        <div class="col-sm-6">
+                            <input type="date" th:field="*{startDate}" class="form-control" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" th:for="endDate">Ngày kết thúc:</label>
+                        <div class="col-sm-6">
+                            <input type="date" th:field="*{endDate}" class="form-control" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" th:for="deposit">Tiền đặt cọc:</label>
+                        <div class="col-sm-6">
+                            <input type="text" th:field="*{deposit}" class="form-control" placeholder="">
+                        </div>
+                    </div>
+
+                    <p></p>
+                    <p></p>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" th:for="customer">Khách hàng thuê dịch vụ:</label>
+                        <div class="col-sm-6">
+                            <select th:field="*{customer}" class="form-control" required placeholder="">
+                                <option value="">--Chọn khách hàng--</option>
+                                <option th:each="customer:${customers}"
+                                        th:value="${customer.id}"
+                                        th:text="${customer.name}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" th:for="facility">--Chọn dịch vụ--</label>
+                        <div class="col-sm-6">
+                            <select th:field="*{facility}" class="form-control" required placeholder="">
+                                <option value="">--Chọn dịch vụ--</option>
+                                <option th:each="facility:${facilities}"
+                                        th:value="${facility.id}"
+                                        th:text="${facility.name}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" th:for="startDate">Dịch vụ đính kèm:</label>
+                        <div class="col-sm-6">
+                            <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAttachFacility">+</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary">Tạo hợp đồng</button>
+                </div>
+            </div>
+
+
+            <!-- Modal thêm dịch vụ đi kèm-->
+            <div class="modal fade" id="addAttachFacility" tabindex="-1" aria-labelledby="deleteModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Thêm dịch vụ đi kèm</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <!--      thêm dịch vụ đi kèm-->
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Chọn dịch vụ:</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" required placeholder="" name="attachFacility">
+                                        <option value="">--Chọn dịch vụ--</option>
+                                        <option th:each="afl:${attachFacilityList}"
+                                                th:value="${afl.id}"
+                                                th:text="${afl.name}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <table class="table table-striped table-hover">
+                                    <tr>
+                                        <th>Tên dịch vụ</th>
+                                        <th>Giá</th>
+                                        <th>Đơn vị</th>
+                                        <th>Mô tả</th>
+                                    </tr>
+                                    <tr th:each="attach,rowStat:${attachFacilityList}">
+                                        <td th:text="${attach.name}"></td>
+                                        <td th:text="${attach.cost}"></td>
+                                        <td th:text="${attach.unit}"></td>
+                                        <td th:text="${attach.status}"></td>
+                                    </tr>
+                                </table>
+
+
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Số lượng:</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" placeholder="" required name="quantity">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Hủy bỏ</button>
+                            <button type="submit" class="btn btn-primary">Tạo hợp đồng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+
+<!--   Phân trang-->
+<div>
+    <nav aria-label="..." class="justify-content-center d-flex">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" th:href="@{/contract/(page=${contractDtos.number - 1})}"
+                   th:if="${contractDtos.hasPrevious()}">&laquo;</a>
+            </li>
+            <li class="page-item disabled" th:unless="${contractDtos.hasPrevious()}">
+                <a class="page-link">&laquo;</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" th:href="@{/contract/(page=${contractDtos.number - 1})}"
+                   th:if="${contractDtos.hasPrevious()}" th:text="${contractDtos.number}"></a>
+            </li>
+
+            <li class="page-item active">
+                <a class="page-link" th:href="@{/contract/(page=${contractDtos.number})}"
+                   th:text="${contractDtos.number + 1}">
+                    <span class="sr-only">(trang hiện tại)</span></a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" th:href="@{/contract/(page=${contractDtos.number+1})}"
+                   th:text="${contractDtos.number+2}" th:if="${contractDtos.hasNext()}"></a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" th:href="@{/contract/(page=${contractDtos.number+1})}"
+                   th:if="${contractDtos.hasNext()}">&raquo;</a>
+            </li>
+            <li class="page-item disabled" th:unless="${contractDtos.hasNext()}">
+                <a class="page-link">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+
+<div th:insert="~{layout::footer}"></div>
+
+<script>
+    function attachFacilityInfo(name) {
+        document.getElementById("attachFacilityName").innerText = name;
+    }
+
+    function contractId(id) {
+        document.getElementById("contractId").value = id;
+    }
+</script>
+</body>
+</html>

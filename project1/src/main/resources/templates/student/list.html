@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand">Home</a>
+            <form class="d-flex" th:action="@{/student}" method="get">
+                <input class="form-control me-2" type="search" placeholder="Tên" aria-label="Search" name="name" th:value="${name}" >
+                <input class="form-control me-2" type="search" placeholder="Mã học sinh" aria-label="Search" name="code" th:value="${code}">
+                <select  class="form-control"  placeholder="" name="clazzId" >
+                    <option value="">--Lớp--</option>
+                    <option th:each="clazz:${clazzList}"
+                            th:value="${clazz.id}" th:selected="${clazz.id==clazzId}"
+                            th:text="${clazz.name}">
+                    </option>
+                </select>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+</div>
+
+
+<div class="col-sm-12" style="background-color:rgba(0, 0, 0, 0.2);height: 70px"><h1
+        style="text-align: center;line-height: 70px  ">Danh Sách</h1></div>
+<p><a th:href="@{/student/create}" class="btn btn-primary" style="margin: 10px;float: right;margin-right: 50px">Thêm
+    mới</a></p>
+<div th:if="${mess}">
+    <p style="color: red;font-weight: bold" th:text="${mess}"></p>
+</div>
+<div style="margin-top:10px">
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Mã học sinh</th>
+            <th scope="col">Tên</th>
+            <th scope="col">Ngày sinh</th>
+            <th scope="col">Giới tính</th>
+            <th scope="col">Địa chỉ</th>
+            <th scope="col">Tên lớp</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student,rowStat:${studentList}">
+            <td th:text="${rowStat.count}+${studentList.number}*${studentList.size}"></td>
+            <td th:text="${student.code}"></td>
+            <td th:text="${student.name}"></td>
+            <td th:text="${student.dayOfBirth}"></td>
+            <td th:text="${student.gender}"></td>
+            <td th:text="${student.address}"></td>
+            <td th:text="${student.clazz.name}"></td>
+            <td><a th:href="@{/student/edit/{id}(id=${student.id})}" class="btn btn-warning">Edit</a></td>
+            <td>
+                <a th:attr="onclick=|deleteInfo('${student.id}','${student.name}')|"
+                   class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form th:action="@{/student/delete}" th:method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Xóa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input name="deleteId" hidden id="deleteId">
+                    <span>Bạn có muốn xóa học sinh có tên </span>
+                    <span style="color: darkred" id="deleteName"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div>
+    <nav aria-label="..." class="justify-content-center d-flex">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" th:href="@{/student(page=${studentList.number - 1}}" th:if="${studentList.hasPrevious()}">&laquo;</a>
+            </li>
+            <li class="page-item disabled" th:unless="${studentList.hasPrevious()}">
+                <a class="page-link">&laquo;</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" th:href="@{/student(page=${studentList.number - 1})}" th:if="${studentList.hasPrevious()}"
+                   th:text="${studentList.number}"></a>
+            </li>
+
+            <li class="page-item active">
+                <a class="page-link" th:href="@{student/(page=${studentList.number})}" th:text="${studentList.number + 1}">
+                    <span class="sr-only">(trang hiện tại)</span></a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" th:href="@{student/(page=${studentList.number+1})}" th:text="${studentList.number+2}"
+                   th:if="${studentList.hasNext()}"></a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" th:href="@{student/(page=${studentList.number+1})}"
+                   th:if="${studentList.hasNext()}">&raquo;</a>
+            </li>
+            <li class="page-item disabled" th:unless="${studentList.hasNext()}">
+                <a class="page-link">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+
+<div th:insert="~{layout::footer}"></div>
+
+<script>
+    function deleteInfo(id, name) {
+        document.getElementById("deleteId").value = id;
+        document.getElementById("deleteName").innerText = name;
+    }
+</script>
+</body>
+</html>
